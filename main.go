@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"api/routes" // Import the routes package
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
