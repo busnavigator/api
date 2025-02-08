@@ -20,7 +20,7 @@ func Hello(c *fiber.Ctx) error {
 // GetAllRoads handles the GET request to retrieve all roads
 func GetAllRoads(c *fiber.Ctx) error {
 	var roads []Road
-	err := config.DB.Select(&roads, "SELECT * FROM roads")
+	err := database.DB.Select(&roads, "SELECT * FROM roads")
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
@@ -35,7 +35,7 @@ func CreateRoad(c *fiber.Ctx) error {
 	}
 
 	// Insert road into the database
-	_, err := config.DB.NamedExec(`INSERT INTO roads (name, cities) VALUES (:name, :cities)`, road)
+	_, err := database.DB.NamedExec(`INSERT INTO roads (name, cities) VALUES (:name, :cities)`, road)
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
