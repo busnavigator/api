@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// Road represents the road structure
+// Route represents the route structure
 type Route struct {
 	ID    int      `json:"id" db:"id"`
 	Name  string   `json:"name" db:"name"`
@@ -18,13 +18,27 @@ func Hello(c *fiber.Ctx) error {
 	return c.SendString("Hello, World!")
 }
 
-// GetAllRoads handles the GET request to retrieve all roads
+// GetAllRoutes handles the GET request to retrieve all routes
 func GetAllRoutes(c *fiber.Ctx) error {
 	var routes []Route
-	err := database.DB.Select(&routes, "SELECT * FROM routes")
+	rows, err := database.DB.Query("SELECT id, name, stops FROM routes")
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var route Route
+		var stopsJSON []byte
+		if err := rows.Scan(&route.ID, &route.Name, &stopsJSON); err != nil {
+			return c.Status(500).SendString("Database scan error: " + err.Error())
+		}
+		if err := json.Unmarshal(stopsJSON, &route.Stops); err != nil {
+			return c.Status(500).SendString("JSON decoding error: " + err.Error())
+		}
+		routes = append(routes, route)
+	}
+
 	return c.JSON(routes)
 }
 
