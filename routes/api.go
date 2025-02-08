@@ -2,6 +2,7 @@ package routes
 
 import (
 	"api/database"
+	"encoding/json"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -27,15 +28,20 @@ func GetAllRoutes(c *fiber.Ctx) error {
 	return c.JSON(routes)
 }
 
-// CreateRoad handles the POST request to create a new road
 func CreateRoute(c *fiber.Ctx) error {
 	route := new(Route)
 	if err := c.BodyParser(route); err != nil {
 		return c.Status(400).SendString("Request error: " + err.Error())
 	}
 
-	// Insert road into the database
-	_, err := database.DB.NamedExec(`INSERT INTO routes (name, stops) VALUES (:name, :stops)`, route)
+	// Convert stops slice to JSON
+	stopsJSON, err := json.Marshal(route.Stops)
+	if err != nil {
+		return c.Status(500).SendString("JSON encoding error: " + err.Error())
+	}
+
+	// Insert into PostgreSQL (assuming `stops` column is of type JSONB)
+	_, err = database.DB.Exec(`INSERT INTO routes (name, stops) VALUES ($1, $2)`, route.Name, stopsJSON)
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
