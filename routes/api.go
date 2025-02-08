@@ -7,9 +7,9 @@ import (
 
 // Road represents the road structure
 type Route struct {
-	ID     int      `json:"id" db:"id"`
-	Name   string   `json:"name" db:"name"`
-	Cities []string `json:"cities" db:"cities"`
+	ID    int      `json:"id" db:"id"`
+	Name  string   `json:"name" db:"name"`
+	Stops []string `json:"stops" db:"stops"`
 }
 
 // Hello sends a simple "Hello, World!" message when accessed via /hello
@@ -35,7 +35,7 @@ func CreateRoad(c *fiber.Ctx) error {
 	}
 
 	// Insert road into the database
-	_, err := database.DB.NamedExec(`INSERT INTO roads (name, cities) VALUES (:name, :cities)`, route)
+	_, err := database.DB.NamedExec(`INSERT INTO roads (name, stops) VALUES (:name, :stops)`, route)
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
