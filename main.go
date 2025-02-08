@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/database"
 	"api/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -14,6 +15,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+
+	database.ConnectDB()
 
 	// Setup API
 	app := fiber.New()
