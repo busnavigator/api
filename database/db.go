@@ -5,6 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" // PostgreSQL driver
 	"log"
+	"os"
 )
 
 var DB *sqlx.DB
@@ -13,7 +14,10 @@ var DB *sqlx.DB
 func ConnectToDB() {
 	var err error
 	// Replace with your actual connection details
-	DB, err = sqlx.Connect("postgres", "user=postgres dbname=bus_navigator password=your_password_here sslmode=disable")
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
+
+	DB, err = sqlx.Connect("postgres", dsn)
 	if err != nil {
 		log.Fatalln("Error connecting to the database:", err)
 	}
