@@ -7,4 +7,5 @@ func SetupRoutes(app *fiber.App) {
 	// Register routes for hello
 	app.Get("/hello", Hello)
 	app.Get("/getAllRoutes", GetAllRoutes)
+	app.Post("/createRoute", CreateRoute)
 }

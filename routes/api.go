@@ -28,14 +28,14 @@ func GetAllRoutes(c *fiber.Ctx) error {
 }
 
 // CreateRoad handles the POST request to create a new road
-func CreateRoad(c *fiber.Ctx) error {
+func CreateRoute(c *fiber.Ctx) error {
 	route := new(Route)
 	if err := c.BodyParser(route); err != nil {
 		return c.Status(400).SendString("Request error: " + err.Error())
 	}
 
 	// Insert road into the database
-	_, err := database.DB.NamedExec(`INSERT INTO roads (name, stops) VALUES (:name, :stops)`, route)
+	_, err := database.DB.NamedExec(`INSERT INTO routes (name, stops) VALUES (:name, :stops)`, route)
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
