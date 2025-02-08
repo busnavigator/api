@@ -6,5 +6,5 @@ import "github.com/gofiber/fiber/v2"
 func SetupRoutes(app *fiber.App) {
 	// Register routes for hello
 	app.Get("/hello", Hello)
-	app.Get("/getAllRoads", GetAllRoads)
+	app.Get("/getAllRoutes", GetAllRoutes)
 }
