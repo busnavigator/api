@@ -3,22 +3,19 @@ package database
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // PostgreSQL driver
 	"log"
-	"os"
 )
 
 var DB *sqlx.DB
 
-func ConnectDB() {
+// ConnectToDB establishes a connection to the database
+func ConnectToDB() {
 	var err error
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s sslmode=disable",
-		os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"),
-	)
-	DB, err = sqlx.Connect("postgres", dsn)
+	// Replace with your actual connection details
+	DB, err = sqlx.Connect("postgres", "user=postgres dbname=bus_navigator password=your_password_here sslmode=disable")
 	if err != nil {
-		log.Fatal("Database connection failed:", err)
+		log.Fatalln("Error connecting to the database:", err)
 	}
-	fmt.Println("Connected to PostgreSQL")
+	fmt.Println("✅ Connected to the PostgreSQL database successfully!")
 }

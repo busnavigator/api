@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("Error loading .env file")
 	}
 
-	database.ConnectDB()
+	database.ConnectToDB()
 
 	// Setup API
 	app := fiber.New()
