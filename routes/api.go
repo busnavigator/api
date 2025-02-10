@@ -8,9 +8,10 @@ import (
 
 // Route represents the route structure
 type Route struct {
-	ID    int      `json:"id" db:"id"`
-	Name  string   `json:"name" db:"name"`
-	Stops []string `json:"stops" db:"stops"`
+	ID       int      `json:"id" db:"id"`
+	Name     string   `json:"name" db:"name"`
+	NextStop int      `json:"nextStop" db:"nextStop"`
+	Stops    []string `json:"stops" db:"stops"`
 }
 
 // Hello sends a simple "Hello, World!" message when accessed via /hello
@@ -21,7 +22,7 @@ func Hello(c *fiber.Ctx) error {
 // GetAllRoutes handles the GET request to retrieve all routes
 func GetAllRoutes(c *fiber.Ctx) error {
 	var routes []Route
-	rows, err := database.DB.Query("SELECT id, name, stops FROM routes")
+	rows, err := database.DB.Query("SELECT id, name, nextStop, stops FROM routes")
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
@@ -30,7 +31,7 @@ func GetAllRoutes(c *fiber.Ctx) error {
 	for rows.Next() {
 		var route Route
 		var stopsJSON []byte
-		if err := rows.Scan(&route.ID, &route.Name, &stopsJSON); err != nil {
+		if err := rows.Scan(&route.ID, &route.Name, &route.NextStop, &stopsJSON); err != nil {
 			return c.Status(500).SendString("Database scan error: " + err.Error())
 		}
 		if err := json.Unmarshal(stopsJSON, &route.Stops); err != nil {
