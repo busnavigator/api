@@ -56,7 +56,7 @@ func CreateRoute(c *fiber.Ctx) error {
 	}
 
 	// Insert into PostgreSQL (assuming `stops` column is of type JSONB)
-	_, err = database.DB.Exec(`INSERT INTO routes (name, stops) VALUES ($1, $2)`, route.Name, stopsJSON)
+	_, err = database.DB.Exec(`INSERT INTO routes (name, nextStop, stops) VALUES ($1, $2, $3)`, route.Name, route.NextStop, stopsJSON)
 	if err != nil {
 		return c.Status(500).SendString("Database error: " + err.Error())
 	}
